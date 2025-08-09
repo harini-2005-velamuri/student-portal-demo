@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LIBAS — Royal Fashion for Men • Women • Kids</title>
+
+  <!-- Google font (classy and modern) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --burgundy: #800020;      /* primary deep burgundy */
+      --burgundy-dark: #5b0018; /* darker accent */
+      --beige: #EDE8D0;        /* warm beige background */
+      --ivory: #FFF9F3;        /* soft ivory */
+      --gold: #C99A44;         /* warm gold accent */
+      --muted: #6b5a53;        /* muted text */
+      --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      --radius: 12px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--muted);
+      background: linear-gradient(180deg,var(--ivory) 0%, #f7f2ec 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    /* Header / Nav */
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(6px);
+      background: rgba(255,255,255,0.55);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .nav{
+      max-width:1200px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 20px;
+    }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:12px;
+      background: linear-gradient(135deg,var(--burgundy-dark),var(--burgundy));
+      display:grid;
+      place-items:center;
+      color:var(--ivory);
+      font-family:"Playfair Display", serif;
+      font-weight:700;
+      box-shadow: var(--card-shadow);
+    }
+    .brand h1{
+      margin:0;
+      font-family:"Playfair Display", serif;
+      font-size:18px;
+      color:var(--burgundy-dark);
+      letter-spacing:1px;
+    }
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:20px;align-items:center}
+    nav a{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+      padding:6px 10px;
+      border-radius:8px;
+    }
+    nav a.cta{
+      background: linear-gradient(90deg,var(--burgundy),var(--burgundy-dark));
+      color:#fff;
+      padding:8px 14px;
+      box-shadow: 0 6px 20px rgba(128,0,32,0.18);
+    }
+
+    /* Hero */
+    .hero{
+      max-width:1200px;
+      margin:28px auto;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:center;
+      padding:20px;
+    }
+    .hero-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), var(--beige));
+      border-radius: var(--radius);
+      padding:36px;
+      box-shadow: var(--card-shadow);
+    }
+    .eyebrow{
+      display:inline-block;
+      background:var(--burgundy);
+      color:white;
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:1px;
+    }
+    h2{
+      font-family:"Playfair Display", serif;
+      color:var(--burgundy-dark);
+      margin:18px 0 10px;
+      font-size:36px;
+      line-height:1.06;
+    }
+    p.lead{
+      margin:0 0 18px;
+      color:#5b4a47;
+      font-size:16px;
+    }
+    .shop-row{display:flex;gap:12px;margin-top:8px}
+    .btn{
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:0.6px;
+      font-size:14px;
+    }
+    .btn-primary{
+      background: linear-gradient(90deg,var(--gold), #e6b65a);
+      color:var(--burgundy-dark);
+      box-shadow: 0 8px 26px rgba(201,154,68,0.18);
+    }
+    .btn-outline{
+      border:2px solid var(--burgundy);
+      color:var(--burgundy-dark);
+      background:transparent;
+    }
+
+    /* Side promo */
+    .promo{
+      border-radius:12px;
+      overflow:hidden;
+      background: linear-gradient(120deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+      color:var(--ivory);
+      padding:28px;
+      min-height:260px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:16px;
+    }
+    .promo h3{margin:0;font-family:"Playfair Display"; font-size:22px}
+    .promo p{margin:0;opacity:0.95}
+
+    /* Collections */
+    .collections{
+      max-width:1200px;
+      margin:20px auto;
+      padding:20px;
+    }
+    .grid{
+      display:grid;
+      gap:18px;
+      grid-template-columns: repeat(3,1fr);
+    }
+    .card{
+      background:white;
+      border-radius:14px;
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(25,18,15,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .card img{
+      width:100%;
+      border-radius:10px;
+      object-fit:cover;
+      height:180px;
+      background:linear-gradient(180deg,var(--beige), #fff);
+    }
+    .card h4{margin:0;color:var(--burgundy-dark);font-family:"Playfair Display"}
+    .muted{color:#7b6b65;font-size:14px}
+
+    /* Product showcase */
+    .showcase{
+      max-width:1200px;
+      margin:28px auto;
+      padding:20px;
+    }
+    .products{
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      gap:18px;
+    }
+    .product{
+      background:linear-gradient(180deg, rgba(237,232,208,0.9), #fff);
+      padding:12px;
+      border-radius:12px;
+      box-shadow: 0 8px 22px rgba(110,80,80,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:start;
+    }
+    .prod-img{
+      width:100%;
+      height:160px;
+      border-radius:10px;
+      background:linear-gradient(180deg,#fff,#f4efe5);
+    }
+    .price{font-weight:800;color:var(--burgundy-dark)}
+
+    /* About / footer */
+    .about{
+      max-width:1200px;
+      margin:30px auto;
+      padding:28px;
+      display:flex;
+      gap:24px;
+      align-items:center;
+      border-radius:12px;
+      background:linear-gradient(90deg,var(--beige), #fff);
+      box-shadow: var(--card-shadow);
+    }
+    .about .logo-large{
+      width:120px;height:120px;border-radius:16px;
+      background:linear-gradient(135deg,var(--burgundy-dark),var(--burgundy));
+      color:var(--ivory);
+      display:grid;place-items:center;
+      font-family:"Playfair Display"; font-size:32px; font-weight:700;
+    }
+    footer{
+      margin-top:28px;
+      background:linear-gradient(180deg,#fff, #f8f4ef);
+      border-top:1px solid rgba(0,0,0,0.04);
+      padding:20px 0;
+    }
+    .foot-inner{
+      max-width:1200px;margin:0 auto;display:flex;gap:20px;align-items:center;justify-content:space-between;padding:0 20px;
+      flex-wrap:wrap;
+    }
+    .socials a{margin-right:12px;text-decoration:none;color:var(--burgundy-dark);font-weight:700}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr; padding:20px}
+      .grid{grid-template-columns: repeat(2,1fr)}
+      .products{grid-template-columns: repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      nav ul{display:none}
+      .brand h1{font-size:16px}
+      .grid{grid-template-columns:1fr}
+      .products{grid-template-columns:1fr}
+      .hero-card{padding:20px}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">L</div>
+        <div>
+          <h1>LIBAS</h1>
+          <div style="font-size:12px;color:var(--muted)">Royal fashion • Men • Women • Kids</div>
+        </div>
+      </div>
+
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#women">Women</a></li>
+          <li><a href="#men">Men</a></li>
+          <li><a href="#kids">Kids</a></li>
+          <li><a class="cta" href="#shop">Shop Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-card">
+        <span class="eyebrow">NEW SEASON</span>
+        <h2 id="hero-title">LIBAS — Timeless silhouettes. Royal details.</h2>
+        <p class="lead">Discover a curated selection of men’s, women’s and kids’ clothing inspired by classic craftsmanship, refined fabrics and modern silhouettes. Designed to feel regal, yet playful.</p>
+
+        <div class="shop-row">
+          <a class="btn btn-primary" href="#collections">Explore Collections</a>
+          <a class="btn btn-outline" href="#about">Our Story</a>
+        </div>
+
+        <div style="margin-top:18px;font-size:13px;color:#6b5a53">
+          <strong>Boutique launch:</strong> Free shipping over ₹4999 • 30-day returns
+        </div>
+      </div>
+
+      <aside class="promo" aria-label="promo">
+        <h3>LIBAS Signature</h3>
+        <p>Limited-edition burgundy silk kurta sets — craftsmanship + sustainable fabrics. Shop the drop.</p>
+        <a class="btn btn-outline" href="#shop" style="margin-top:10px;color:var(--ivory);border-color:rgba(255,255,255,0.35)">Shop the Drop</a>
+      </aside>
+    </section>
+
+    <!-- Collections -->
+    <section id="collections" class="collections" aria-labelledby="collections-title">
+      <div style="display:flex;align-items:end;justify-content:space-between;margin-bottom:12px">
+        <h3 id="collections-title" style="font-family:'Playfair Display';color:var(--burgundy-dark);margin:0">Featured Collections</h3>
+        <div style="font-size:14px;color:#7b6b65">Made with premium fabrics</div>
+      </div>
+
+      <div class="grid">
+        <article class="card" aria-label="Women collection">
+          <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Women's collection">
+          <h4>Women • Elegance</h4>
+          <p class="muted">Silk & brocade ensembles, tailored jackets and evening wear.</p>
+        </article>
+
+        <article class="card" aria-label="Men collection">
+          <img src="https://images.unsplash.com/photo-1520975924940-4ad487f8e0db?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Men's collection">
+          <h4>Men • Refined</h4>
+          <p class="muted">Crafted kurtas, structured coats and smart casual separates.</p>
+        </article>
+
+        <article class="card" aria-label="Kids collection">
+          <img src="https://images.unsplash.com/photo-1543168252-4c57b6f1b5db?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Kids collection">
+          <h4>Kids • Playful Luxury</h4>
+          <p class="muted">Soft linens, playful prints and durable construction for little royals.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Product showcase -->
+    <section id="shop" class="showcase" aria-labelledby="shop-title">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 id="shop-title" style="font-family:'Playfair Display';color:var(--burgundy-dark);margin:0">Handpicked For You</h3>
+        <div style="font-size:14px;color:#7b6b65">New arrivals • Curated pieces</div>
+      </div>
+
+      <div class="products" aria-live="polite">
+        <!-- repeater product cards (placeholders) -->
+        <div class="product">
+          <div class="prod-img" aria-hidden="true"></div>
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <div>
+              <div style="font-weight:700;color:var(--burgundy-dark);">Maroon Silk Kurta</div>
+              <div class="muted" style="font-size:13px">Women • Evening</div>
+            </div>
+            <div class="price">₹5,499</div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="prod-img" aria-hidden="true"></div>
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <div>
+              <div style="font-weight:700;color:var(--burgundy-dark);">Tailored Blazer</div>
+              <div class="muted" style="font-size:13px">Men • Formal</div>
+            </div>
+            <div class="price">₹9,299</div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="prod-img" aria-hidden="true"></div>
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <div>
+              <div style="font-weight:700;color:var(--burgundy-dark);">Kids Festive Set</div>
+              <div class="muted" style="font-size:13px">Kids • Festive</div>
+            </div>
+            <div class="price">₹2,499</div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="prod-img" aria-hidden="true"></div>
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <div>
+              <div style="font-weight:700;color:var(--burgundy-dark);">Signature Scarf</div>
+              <div class="muted" style="font-size:13px">Accessories</div>
+            </div>
+            <div class="price">₹1,199</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about" aria-labelledby="about-title">
+      <div class="logo-large">L</div>
+      <div>
+        <h3 id="about-title" style="margin:0;font-family:'Playfair Display';color:var(--burgundy-dark)">Our Story</h3>
+        <p class="muted" style="margin-top:8px;max-width:820px">
+          LIBAS began with a love for heritage textiles and contemporary tailoring. We combine artisanal techniques with modern silhouettes — creating garments that feel like heirlooms, yet are everyday wearable. Our collections include men’s, women’s and kids’ wear, crafted sustainably and thoughtfully.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-inner">
+      <div>
+        <strong style="color:var(--burgundy-dark);font-family:'Playfair Display'">LIBAS</strong>
+        <div style="font-size:13px;color:#7b6b65;margin-top:6px">Royal fashion • Since 2025</div>
+      </div>
+
+      <div class="socials" aria-label="social links">
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Facebook">Facebook</a>
+        <a href="#" aria-label="Pinterest">Pinterest</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
