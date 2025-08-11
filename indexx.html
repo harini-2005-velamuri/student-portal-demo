@@ -1,0 +1,224 @@
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// MoodGarden: a playful single-page app that grows a tiny interactive "garden" based on your mood.
+// Features:
+// - Choose a mood (Happy, Calm, Focused, Energetic, Melancholy)
+// - The garden visual (background gradient + plants) updates to match mood
+// - Add / remove plants, save garden to localStorage, share via URL state
+// - Responsive, accessible controls, subtle animations using Framer Motion
+
+export default function App() {
+  const moods = {
+    Happy: { bg: ["#FFEFBA", "#FFFFFF"], palette: ["#FF6B6B", "#FFD93D", "#6BCB77"] },
+    Calm: { bg: ["#DCECFB", "#F6F9FF"], palette: ["#6C8EBF", "#8FB7D6", "#BFD8F8"] },
+    Focused: { bg: ["#FFF6E5", "#FFF1F0"], palette: ["#4A4E69", "#9A8C98", "#C9ADA7"] },
+    Energetic: { bg: ["#FFECB3", "#FFE0B2"], palette: ["#FF7F50", "#FFB86B", "#FFD166"] },
+    Melancholy: { bg: ["#ECE9F1", "#F3E9F5"], palette: ["#6A5AA3", "#9B8FD6", "#C4B6E6"] },
+  };
+
+  const defaultState = {
+    mood: "Calm",
+    plants: [
+      { id: 1, type: "fern", size: 1.1, tilt: -6 },
+      { id: 2, type: "cactus", size: 0.9, tilt: 4 },
+    ],
+  };
+
+  const [garden, setGarden] = useState(defaultState);
+
+  // Load from url state or localStorage
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("g");
+      if (q) {
+        const decoded = JSON.parse(atob(q));
+        setGarden(decoded);
+        return;
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    const saved = localStorage.getItem("moodgarden:v1");
+    if (saved) setGarden(JSON.parse(saved));
+  }, []);
+
+  // persist
+  useEffect(() => {
+    localStorage.setItem("moodgarden:v1", JSON.stringify(garden));
+  }, [garden]);
+
+  function changeMood(m) {
+    setGarden((g) => ({ ...g, mood: m }));
+  }
+
+  function addPlant() {
+    setGarden((g) => {
+      const id = Date.now();
+      const types = ["fern", "cactus", "flower", "tree", "grass"];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const plant = { id, type, size: +(0.8 + Math.random() * 0.8).toFixed(2), tilt: Math.round((Math.random() - 0.5) * 18) };
+      return { ...g, plants: [...g.plants, plant] };
+    });
+  }
+
+  function removePlant(id) {
+    setGarden((g) => ({ ...g, plants: g.plants.filter((p) => p.id !== id) }));
+  }
+
+  function shareURL() {
+    const encoded = btoa(JSON.stringify(garden));
+    const url = `${window.location.origin}${window.location.pathname}?g=${encoded}`;
+    navigator.clipboard?.writeText(url);
+    alert("Share URL copied to clipboard!");
+  }
+
+  function resetGarden() {
+    setGarden(defaultState);
+    localStorage.removeItem("moodgarden:v1");
+  }
+
+  const moodMeta = moods[garden.mood] || moods.Calm;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b" style={{ backgroundImage: `linear-gradient(180deg, ${moodMeta.bg[0]}, ${moodMeta.bg[1]})` }}>
+      <main className="w-full max-w-4xl bg-white/80 backdrop-blur rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-6 md:p-8 grid md:grid-cols-3 gap-6">
+          {/* Controls */}
+          <section className="md:col-span-1">
+            <h1 className="text-2xl font-semibold">MoodGarden</h1>
+            <p className="text-sm text-gray-600 mt-2">Grow a tiny garden that matches your mood. Save, share, and play.</p>
+
+            <div className="mt-4">
+              <label className="block text-xs font-medium text-gray-700">Mood</label>
+              <div className="mt-2 flex gap-2 flex-wrap">
+                {Object.keys(moods).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => changeMood(m)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium focus:outline-none focus:ring-2 ${garden.mood === m ? 'ring-2 ring-offset-2' : 'ring-1 ring-gray-200'}`}>
+                    {m}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-xs font-medium text-gray-700">Actions</label>
+              <div className="mt-2 flex gap-2">
+                <button onClick={addPlant} className="px-3 py-2 rounded-lg shadow-sm font-medium">Add plant</button>
+                <button onClick={shareURL} className="px-3 py-2 rounded-lg shadow-sm font-medium">Share</button>
+                <button onClick={resetGarden} className="px-3 py-2 rounded-lg shadow-sm font-medium">Reset</button>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <label className="block text-xs font-medium text-gray-700">Palette</label>
+              <div className="mt-2 flex gap-2">
+                {moodMeta.palette.map((c, i) => (
+                  <div key={i} style={{ background: c }} className="w-8 h-8 rounded-full border" />
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 text-xs text-gray-500">
+              Tip: Click a plant to remove it. Use Share to copy a URL that recreates your garden.
+            </div>
+          </section>
+
+          {/* Garden view */}
+          <section className="md:col-span-2 relative bg-white rounded-xl p-4 flex flex-col gap-4" aria-label="garden-view">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-medium">Your Garden — <span className="text-sm text-gray-600">{garden.mood}</span></h2>
+                <p className="text-xs text-gray-500">Plants: {garden.plants.length}</p>
+              </div>
+            </div>
+
+            <div className="flex-1 grid place-items-stretch overflow-hidden">
+              <div className="relative w-full h-64 md:h-80 rounded-lg border border-dashed border-gray-200 overflow-hidden" role="img" aria-label="visual garden">
+                {/* ground */}
+                <div className="absolute bottom-0 left-0 right-0 h-24 md:h-28" style={{ background: `linear-gradient(180deg, rgba(255,255,255,0), rgba(0,0,0,0.03))` }} />
+
+                {/* plants */}
+                <div className="absolute inset-0 flex items-end gap-4 p-4 overflow-x-auto">
+                  <AnimatePresence>
+                    {garden.plants.map((p) => (
+                      <motion.button
+                        key={p.id}
+                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: p.size }}
+                        exit={{ opacity: 0, y: 30 }}
+                        transition={{ type: "spring", stiffness: 120 }}
+                        onClick={() => removePlant(p.id)}
+                        title={`Remove ${p.type}`}
+                        className="flex-none w-28 h-44 md:w-32 md:h-48 p-2 rounded-lg flex items-end justify-center focus:outline-none"
+                        style={{ transform: `rotate(${p.tilt}deg)` }}>
+                        <PlantVisual type={p.type} palette={moodMeta.palette} />
+                      </motion.button>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
+
+            <footer className="flex items-center justify-between text-xs text-gray-500">
+              <div>LocalSave: {localStorage ? "on" : "off"}</div>
+              <div>Built with ❤️ — interactive demo</div>
+            </footer>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function PlantVisual({ type = "fern", palette = ["#6BCB77", "#8FD19E"] }) {
+  // simple SVGs for plants — change shape and color by 'type'
+  const [c1, c2] = palette;
+  if (type === "cactus") {
+    return (
+      <svg viewBox="0 0 80 120" className="w-full h-full">
+        <rect x="28" y="40" width="24" height="60" rx="12" fill={c1} />
+        <rect x="12" y="60" width="12" height="32" rx="6" fill={c1} transform="rotate(-12 12 60)" />
+        <rect x="56" y="60" width="12" height="32" rx="6" fill={c1} transform="rotate(12 56 60)" />
+        <ellipse cx="40" cy="108" rx="20" ry="8" fill={c2} />
+      </svg>
+    );
+  }
+
+  if (type === "flower") {
+    return (
+      <svg viewBox="0 0 80 120" className="w-full h-full">
+        <rect x="36" y="58" width="8" height="42" rx="4" fill={c2} />
+        <g transform="translate(40,48)">
+          <circle r="12" fill={c1} />
+          <path d="M0,-22 C12,-18 22,-8 22,0 C22,8 12,18 0,22 C-12,18 -22,8 -22,0 C-22,-8 -12,-18 0,-22" fill={c2} opacity="0.9" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "tree") {
+    return (
+      <svg viewBox="0 0 80 120" className="w-full h-full">
+        <rect x="34" y="60" width="12" height="36" rx="6" fill="#8D6E63" />
+        <circle cx="40" cy="48" r="26" fill={c1} />
+        <ellipse cx="40" cy="84" rx="22" ry="8" fill={c2} />
+      </svg>
+    );
+  }
+
+  // default fern / grass
+  return (
+    <svg viewBox="0 0 80 120" className="w-full h-full">
+      <rect x="36" y="70" width="8" height="28" rx="4" fill={c2} />
+      <g transform="translate(40,64)">
+        <path d="M0,0 C-8,-10 -12,-26 -6,-36 C-2,-44 8,-42 14,-34 C20,-26 10,-12 8,0" fill={c1} opacity="0.95" />
+        <path d="M0,6 C8,-4 12,-20 6,-30 C2,-38 -8,-36 -14,-28 C-20,-20 -10,-6 -8,6" fill={c1} opacity="0.85" />
+      </g>
+    </svg>
+  );
+}
